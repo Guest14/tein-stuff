@@ -1,4 +1,4 @@
-// test.cpp
+// main.cpp
 
 #include <iostream>
 #include "Windows.h"
