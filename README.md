@@ -1,4 +1,4 @@
-# Info
+# About
 
 Info HUD for The End Is Nigh
 
