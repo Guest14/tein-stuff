@@ -109,8 +109,8 @@ int main()
 
         
 
-        //if (filetime > temp) //display once every frame
-        //{
+        if (filetime > temp) //display once every frame
+        {
 
             ReadProcessMemory(hProcess, (BYTE*)xposaddr, &xpos, 8, 0);
             ReadProcessMemory(hProcess, (BYTE*)yposaddr, &ypos, 8, 0);
@@ -126,7 +126,7 @@ int main()
             std::cout << "pos: " << xpos << ", " << ypos << std::endl;
             std::cout << "speed: " << xspeed << ", " << yspeed << std::endl;
 
-        //}
+        }
     }
 }
 
