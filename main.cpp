@@ -1,4 +1,4 @@
-// main.cpp
+// test.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
 //
 
 #include <iostream>
@@ -79,6 +79,8 @@ int main()
 
     double xpos = 0;
     double ypos = 0;
+    double xspeed = 0;
+    double yspeed = 0;
     int filetime = 0;
 
 
@@ -86,6 +88,10 @@ int main()
     {
         uintptr_t xposaddr = FindDMAAddy(hProcess, moduleBase + 0x2D8AEC, {0x2C,0x18,0x74,0x20,0x1C,0x54,0x0,0x18,0x28});
         uintptr_t yposaddr = FindDMAAddy(hProcess, moduleBase + 0x2D8AEC, {0x2C,0x18,0x74,0x20,0x1C,0x54,0x0,0x18,0x30});
+
+        uintptr_t xspeedaddr = FindDMAAddy(hProcess, moduleBase + 0x2D8AEC, { 0x2C,0x18,0x74,0x20,0x1C,0x0,0x34C,0x174,0x98 });
+        uintptr_t yspeedaddr = FindDMAAddy(hProcess, moduleBase + 0x2D8AEC, { 0x2C,0x18,0x74,0x20,0x1C,0x0,0x34C,0x174,0xA0 });
+
         
         uintptr_t filetimeaddr = moduleBase + 0x2C67E0;
 
@@ -104,13 +110,13 @@ int main()
 
         
 
-        if (filetime > temp) //display once every frame
-        {
-            double tempxpos = xpos;
-            double tempypos = ypos;
+        //if (filetime > temp) //display once every frame
+        //{
 
             ReadProcessMemory(hProcess, (BYTE*)xposaddr, &xpos, 8, 0);
             ReadProcessMemory(hProcess, (BYTE*)yposaddr, &ypos, 8, 0);
+            ReadProcessMemory(hProcess, (BYTE*)xspeedaddr, &xspeed, 8, 0);
+            ReadProcessMemory(hProcess, (BYTE*)yspeedaddr, &yspeed, 8, 0);
 
             cout << fixed;
             cout.precision(3);
@@ -118,10 +124,10 @@ int main()
 
             std::cout << "time: " << h << ":" << m << ":" << s << " (" << filetime << ")" << std::endl;
             cout.precision(20);
-            std::cout << "x: " << xpos << " / " << "y: " << ypos << std::endl;
-            std::cout << "dx: " << xpos - tempxpos << " / " << "dy: " << ypos - tempypos << std::endl;
+            std::cout << "pos: " << xpos << ", " << ypos << std::endl;
+            std::cout << "speed: " << xspeed << ", " << yspeed << std::endl;
 
-        }
+        //}
     }
 }
 
