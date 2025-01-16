@@ -1,5 +1,7 @@
 // main.cpp
 
+
+
 #include <iostream>
 #include "Windows.h"
 #include "process.h"
@@ -80,6 +82,11 @@ int main()
     double ypos = 0;
     double xspeed = 0;
     double yspeed = 0;
+    double playerdirection = 0;
+
+    int xmap = 0;
+    int ymap = 0;
+
     int filetime = 0;
 
 
@@ -91,7 +98,11 @@ int main()
         uintptr_t xspeedaddr = FindDMAAddy(hProcess, moduleBase + 0x2D8AEC, { 0x2C,0x18,0x74,0x20,0x1C,0x0,0x34C,0x174,0x98 });
         uintptr_t yspeedaddr = FindDMAAddy(hProcess, moduleBase + 0x2D8AEC, { 0x2C,0x18,0x74,0x20,0x1C,0x0,0x34C,0x174,0xA0 });
 
-        
+        uintptr_t playerdirectionaddr = FindDMAAddy(hProcess, moduleBase + 0x2D8AEC, {0x30,0x14,0x1C,0x74,0x20,0x1C,0x2C4,0x0,0x6B0});
+
+        uintptr_t xmapaddr = FindDMAAddy(hProcess, moduleBase + 0x2D8AEC, { 0x2C,0x18,0x74,0x20,0x24,0x200,0x0,0x178 });
+        uintptr_t ymapaddr = FindDMAAddy(hProcess, moduleBase + 0x2D8AEC, { 0x2C,0x18,0x10,0x80,0x20,0x24,0x200,0x0,0x17C });
+
         uintptr_t filetimeaddr = moduleBase + 0x2C67E0;
 
         //std::cout << sizeof(xposaddr) << std::endl;
@@ -116,16 +127,27 @@ int main()
             ReadProcessMemory(hProcess, (BYTE*)yposaddr, &ypos, 8, 0);
             ReadProcessMemory(hProcess, (BYTE*)xspeedaddr, &xspeed, 8, 0);
             ReadProcessMemory(hProcess, (BYTE*)yspeedaddr, &yspeed, 8, 0);
+            ReadProcessMemory(hProcess, (BYTE*)playerdirectionaddr, &playerdirection, 8, 0);
+            ReadProcessMemory(hProcess, (BYTE*)xmapaddr, &xmap, 4, 0);
+            ReadProcessMemory(hProcess, (BYTE*)ymapaddr, &ymap, 4, 0);
+
 
             cout << fixed;
             cout.precision(3);
 
-
             std::cout << "time: " << h << ":" << m << ":" << s << " (" << filetime << ")" << std::endl;
+            std::cout << "map_pos: " << xmap << ", " << ymap << std::endl;
+
             cout.precision(20);
             std::cout << "pos: " << xpos << ", " << ypos << std::endl;
             std::cout << "speed: " << xspeed << ", " << yspeed << std::endl;
 
+            if (playerdirection == 1) {
+                std::cout << "right" << std::endl;
+            }
+            else if (playerdirection == -1){
+                std::cout << "left" << std::endl;
+            }
         }
     }
 }
