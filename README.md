@@ -8,8 +8,8 @@ F1: save state
 F3: load state
 
 issues:
-- only the player's state is saved
-- many more
+- only the player's state is saved (moving object, cart lives and such are not saved)
+- slight inconveniences
 
 
 
