@@ -8,8 +8,8 @@ F1: save state
 F3: load state
 
 issues:
--only the player's state is saved
--
+- only the player's state is saved
+- many more
 
 
 
