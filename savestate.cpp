@@ -84,11 +84,14 @@ int main()
     double yspeed = 0;
     double playerdirection = 0;
 
-    int xmap = 0;
-    int ymap = 0;
+    int savedxmap = 0;
+    int savedymap = 0;
 
-    int filetime = 0;
+    //int filetime = 0;
     bool statesaved = false;
+
+    int currentxmap = 0;
+    int currentymap = 0;
 
     while (true)
     {
@@ -105,11 +108,14 @@ int main()
 
         uintptr_t filetimeaddr = moduleBase + 0x2C67E0;
 
+        ReadProcessMemory(hProcess, (BYTE*)xmapaddr, &currentxmap, 4, 0);
+        ReadProcessMemory(hProcess, (BYTE*)ymapaddr, &currentymap, 4, 0);
+
+        //std::cout << '(' << currentxmap << ',' << currentymap << std::endl;
+        //Sleep(1000);
+
         //std::cout << sizeof(xposaddr) << std::endl;
         //std::cout << sizeof(yposaddr) << std::endl;
-
-        int tempx = xmap;
-        int tempy = ymap;
         
 
         //int h = filetime / 216000;
@@ -117,13 +123,6 @@ int main()
         //float s = (filetime - h * 216000 - m * 3600) / float(60);
 
 
-        ReadProcessMemory(hProcess, (BYTE*)xmapaddr, &xmap, 4, 0);
-        ReadProcessMemory(hProcess, (BYTE*)ymapaddr, &ymap, 4, 0);
-
-        if (tempx != xmap or tempy != ymap)
-        {
-            statesaved = false;
-        }
 
 
         if (GetAsyncKeyState(VK_F1)) 
@@ -136,8 +135,10 @@ int main()
             ReadProcessMemory(hProcess, (BYTE*)xspeedaddr, &xspeed, 8, 0);
             ReadProcessMemory(hProcess, (BYTE*)yspeedaddr, &yspeed, 8, 0);
             ReadProcessMemory(hProcess, (BYTE*)playerdirectionaddr, &playerdirection, 8, 0);
-            ReadProcessMemory(hProcess, (BYTE*)xmapaddr, &xmap, 4, 0);
-            ReadProcessMemory(hProcess, (BYTE*)ymapaddr, &ymap, 4, 0);
+            ReadProcessMemory(hProcess, (BYTE*)xmapaddr, &savedxmap, 4, 0);
+            ReadProcessMemory(hProcess, (BYTE*)ymapaddr, &savedymap, 4, 0);
+
+            //std::cout << savedxmap << ',' << savedymap << std::endl;
 
             std::cout << "saved" << std::endl;
             Sleep(500);
@@ -165,14 +166,25 @@ int main()
         if (GetAsyncKeyState(VK_F3))
         {
             if (statesaved==true) {
-                WriteProcessMemory(hProcess, (BYTE*)playerdirectionaddr, &playerdirection, 8, 0);
+                //std::cout << savedxmap << ',' << savedymap << std::endl;
+
+                if (currentxmap == savedxmap and currentymap == savedymap)
+                {
+
+                    WriteProcessMemory(hProcess, (BYTE*)playerdirectionaddr, &playerdirection, 8, 0);
+                    WriteProcessMemory(hProcess, (BYTE*)xposaddr, &xpos, 8, 0);
+                    WriteProcessMemory(hProcess, (BYTE*)yposaddr, &ypos, 8, 0);
+                    WriteProcessMemory(hProcess, (BYTE*)xspeedaddr, &xspeed, 8, 0);
+                    WriteProcessMemory(hProcess, (BYTE*)yspeedaddr, &yspeed, 8, 0);
+                }
+                else
+                {
+
+                    WriteProcessMemory(hProcess, (BYTE*)xmapaddr, &savedxmap, 4, 0);
+                    WriteProcessMemory(hProcess, (BYTE*)ymapaddr, &savedymap, 4, 0);
 
 
-                WriteProcessMemory(hProcess, (BYTE*)xposaddr, &xpos, 8, 0);
-                WriteProcessMemory(hProcess, (BYTE*)yposaddr, &ypos, 8, 0);
-                WriteProcessMemory(hProcess, (BYTE*)xspeedaddr, &xspeed, 8, 0);
-                WriteProcessMemory(hProcess, (BYTE*)yspeedaddr, &yspeed, 8, 0);
-
+                }
 
                 /*cout.precision(20);
                 std::cout << "pos: " << xpos << ", " << ypos << std::endl;
