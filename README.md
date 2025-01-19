@@ -1,6 +1,19 @@
 # About
 
-Info HUD for The End Is Nigh
+launch the game and then run .exe file
+
+Savestate
+
+F1: save state
+F3: load state
+
+issues:
+-only the player's state is saved
+-
+
+
+
+Info HUD
 
 - filetime -- h:m:s (frame)
 - map_pos - (map_xpos, map_ypos)
