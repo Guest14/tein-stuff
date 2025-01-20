@@ -8,7 +8,8 @@ F1: save state
 F3: load state
 
 issues:
-- only the player's state is saved (moving object, cart lives and such are not saved)
+- only the player's state is saved (moving objects, crumble blocks and such are not saved)
+- state set right after jumping doesn't work properly
 - slight inconveniences
 
 
