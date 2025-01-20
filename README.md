@@ -9,7 +9,7 @@ F3: load state
 
 issues:
 - only the player's state is saved (moving objects, crumble blocks and such are not saved)
-- if a state was set right after jumping doesn't work properly
+- if you save state right after jumping doesn't work properly
 - slight inconveniences
 
 
